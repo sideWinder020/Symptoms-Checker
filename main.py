@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 import openai
@@ -8,24 +9,25 @@ import logging
 import asyncio
 import json
 from pydantic import BaseModel
+import os
 
 class ChatRequest(BaseModel):
     message: str
     user_id: str
 
 
-with open('config_key.json', 'r') as file:
-    json_data = json.load(file)
+# with open('config_key.json', 'r') as file:
+#     json_data = json.load(file)
 
 
-# load_dotenv()
-# openai.api_key = os.getenv("OPENAPIKEY")
+load_dotenv()
+openai.api_key = os.getenv("OPENAPIKEY")
 
-openai.api_key = json_data["OPENAPIKEY"]
+# openai.api_key = json_data["OPENAPIKEY"]
 
 app = FastAPI()
-# MAX_QUESTIONS = int(os.getenv("FREEPLAN", 5))
-MAX_QUESTIONS = int(json_data["MAX_QUESTIONS_ALLOWED"])
+MAX_QUESTIONS = int(os.getenv("FREEPLAN", 5))
+# MAX_QUESTIONS = int(json_data["MAX_QUESTIONS_ALLOWED"])
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
